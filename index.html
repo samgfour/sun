@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sun — Payments without the darkness</title>
+  <style>
+    :root { --ink:#10251e; --muted:#5e716a; --sun:#ffb000; --sun2:#ff7a00; --cream:#fffaf0; --green:#0f6b51; --line:#e6e2d8; --card:#ffffff; --shadow:0 18px 50px rgba(21,46,38,.10); }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:linear-gradient(180deg,#fff8e5 0,#f8fbf4 430px,#f6f8f5 100%); font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    .wrap { max-width:1160px; margin:auto; padding:0 24px; }
+    nav { height:78px; display:flex; align-items:center; justify-content:space-between; }
+    .brand { font-size:26px; font-weight:800; letter-spacing:-1px; display:flex; align-items:center; gap:10px; }
+    .sunmark { width:31px; height:31px; border-radius:50%; background:radial-gradient(circle at 35% 32%,#fff5a8 0 12%,var(--sun) 34%,var(--sun2) 100%); box-shadow:0 0 0 7px rgba(255,176,0,.16); }
+    .navlinks { display:flex; gap:24px; font-size:14px; color:#385248; }
+    .button { border:0; border-radius:999px; padding:12px 18px; font:inherit; font-weight:700; cursor:pointer; background:var(--ink); color:#fff; transition:.2s transform,.2s opacity; }
+    .button:hover { transform:translateY(-1px); opacity:.93; }
+    .button.secondary { background:#fff; color:var(--ink); border:1px solid var(--line); }
+    .hero { display:grid; grid-template-columns:1.05fr .95fr; gap:48px; padding:62px 0 74px; align-items:center; }
+    .eyebrow { color:var(--green); text-transform:uppercase; letter-spacing:.12em; font-size:12px; font-weight:800; }
+    h1 { font-size:clamp(40px,6vw,70px); line-height:1.02; letter-spacing:-.055em; margin:13px 0 21px; max-width:720px; }
+    .accent { color:var(--sun2); }
+    .lead { font-size:19px; color:#40564d; max-width:620px; margin:0 0 28px; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; }
+    .trust { display:flex; flex-wrap:wrap; gap:17px; margin-top:28px; color:var(--muted); font-size:14px; }
+    .trust span::before { content:"✓"; color:var(--green); font-weight:900; margin-right:7px; }
+    .phone { background:#14342a; border:8px solid #16342c; border-radius:36px; max-width:365px; margin:auto; padding:12px; color:#f8fff8; box-shadow:0 28px 60px rgba(11,39,29,.25); }
+    .phone-top { display:flex; justify-content:space-between; font-size:12px; padding:5px 8px 15px; opacity:.9; }
+    .screen { background:#f7fbf6; color:var(--ink); border-radius:25px; min-height:500px; padding:21px; }
+    .screen-brand { display:flex; align-items:center; gap:8px; font-size:19px; font-weight:800; }
+    .screen-brand .sunmark { width:20px; height:20px; box-shadow:none; }
+    .welcome { color:var(--muted); font-size:13px; margin:25px 0 5px; }
+    .balance { font-size:34px; font-weight:800; letter-spacing:-1.5px; }
+    .sub { color:var(--muted); font-size:13px; }
+    .payment-card { margin:23px 0 15px; background:#fff; padding:17px; border:1px solid #e7ede8; border-radius:17px; box-shadow:0 8px 22px rgba(16,37,30,.06); }
+    .payment-card header { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); }
+    .amount { font-size:24px; font-weight:800; margin:7px 0; }
+    .pill { display:inline-block; color:#066044; background:#e1f5e9; font-weight:800; padding:4px 8px; border-radius:99px; font-size:11px; }
+    .pill.reviewing { background:#fff3d7; color:#5f4b21; }
+    .pill.awaiting { background:#eef2ee; color:#51625b; }
+    .pill.withdrawn { background:#e6e2d8; color:#3c4a44; }
+    .status { background:#fff3d7; border:1px solid #ffe2a2; padding:13px; border-radius:13px; font-size:12px; color:#5f4b21; }
+    .status b { display:block; color:#402d0b; margin-bottom:3px; }
+    section { padding:74px 0; }
+    .section-head { max-width:720px; margin-bottom:35px; }
+    h2 { font-size:38px; line-height:1.1; letter-spacing:-.04em; margin:8px 0 12px; }
+    .section-head p { color:var(--muted); font-size:17px; margin:0; }
+    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+    .card { background:var(--card); padding:25px; border:1px solid var(--line); border-radius:20px; box-shadow:0 8px 20px rgba(16,37,30,.035); }
+    .icon { width:42px; height:42px; border-radius:14px; display:grid; place-items:center; background:#fff4cf; font-size:20px; }
+    .card h3 { margin:16px 0 8px; font-size:18px; letter-spacing:-.02em; }
+    .card p { margin:0; color:var(--muted); font-size:14px; }
+    .flow { background:#113b2f; color:#fff; }
+    .flow .section-head p { color:#c6d9d0; }
+    .steps { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+    .step { min-height:162px; padding:18px; border-radius:17px; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.13); }
+    .stepno { color:#ffc550; font-weight:800; font-size:13px; }
+    .step h3 { font-size:16px; margin:18px 0 8px; }
+    .step p { color:#d3e2db; font-size:13px; margin:0; }
+    .dashboard { background:#fff; border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow); padding:25px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+    label { display:block; color:#4c6259; font-size:13px; font-weight:700; margin:14px 0 6px; }
+    input,select { width:100%; border:1px solid #d9e1dc; border-radius:11px; padding:12px; background:#fff; color:var(--ink); font:inherit; outline:none; }
+    input:focus,select:focus { border-color:#58a889; box-shadow:0 0 0 3px rgba(88,168,137,.16); }
+    .invoice-value { font-size:28px; font-weight:800; letter-spacing:-1px; margin:6px 0 0; }
+    .manifesto { background:linear-gradient(135deg,#ffbf20,#ff8000); color:#1f240f; border-radius:26px; padding:42px; }
+    .manifesto blockquote { font-size:clamp(23px,3.2vw,38px); line-height:1.15; letter-spacing:-.04em; font-weight:750; max-width:850px; margin:0; }
+    .manifesto p { margin:20px 0 0; font-weight:700; }
+    footer { padding:38px 0; color:#61736b; font-size:14px; }
+    /* app + auth additions */
+    .tabs { display:flex; gap:6px; border-bottom:1px solid var(--line); margin:6px 0 22px; }
+    .tab-btn { flex:1; background:none; border:none; padding:10px 4px; font:inherit; font-size:14px; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; }
+    .tab-btn.active { color:var(--ink); border-color:var(--sun2); font-weight:700; }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+    .stepper { display:flex; margin:6px 0 16px; }
+    .step2 { flex:1; text-align:center; position:relative; }
+    .dot { width:24px; height:24px; border-radius:50%; background:#fff; border:2px solid var(--line); margin:0 auto 6px; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--muted); position:relative; z-index:1; }
+    .step2.done .dot { background:var(--green); border-color:var(--green); color:#fff; }
+    .step2.current .dot { background:var(--sun2); border-color:var(--sun2); color:#fff; }
+    .step2:not(:last-child)::after { content:''; position:absolute; top:11px; left:50%; width:100%; height:2px; background:var(--line); }
+    .step2.done:not(:last-child)::after { background:var(--green); }
+    .step2-label { font-size:11px; color:var(--muted); }
+    .step2.done .step2-label, .step2.current .step2-label { color:var(--ink); font-weight:700; }
+    .info-list { margin:12px 0; padding:0; list-style:none; }
+    .info-list li { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px; }
+    .info-list li:last-child { border-bottom:none; }
+    .info-list .k { color:var(--muted); }
+    .auth-card { max-width:380px; }
+    .field-error { font-size:13px; color:#b3261e; margin-top:8px; display:none; }
+    .linklike { background:none; border:none; color:var(--green); font-weight:700; font-size:13px; cursor:pointer; padding:0; margin-top:14px; }
+    .request-card + .request-card { margin-top:14px; }
+    .empty { text-align:center; padding:30px 10px; color:var(--muted); }
+    .hidden { display:none; }
+    @media(max-width:850px) { .hero { grid-template-columns:1fr; } .phone { margin:20px auto 0; } .steps { grid-template-columns:repeat(2,1fr); } .grid3 { grid-template-columns:1fr; } .navlinks { display:none; } }
+    @media(max-width:520px) { .wrap { padding:0 18px; } .hero { padding-top:38px; } section { padding:55px 0; } .steps,.form-row { grid-template-columns:1fr; } .manifesto { padding:28px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="#top"><span class="sunmark"></span>sun</a>
+      <div class="navlinks"><a href="#why">Why Sun</a><a href="#how">How it works</a><a href="#demo">Try it</a></div>
+      <button class="button" onclick="document.querySelector('#demo').scrollIntoView({behavior:'smooth'})">Try the demo</button>
+    </nav>
+  </div>
+
+  <main id="top">
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">Payments without the darkness</div>
+        <h1>Your work deserves a <span class="accent">clear path</span> home.</h1>
+        <p class="lead">Sun helps African freelancers and small businesses receive global payments, understand every fee, and cash out locally—with clarity when money needs review.</p>
+        <div class="actions"><button class="button" onclick="document.querySelector('#demo').scrollIntoView({behavior:'smooth'})">Create a payment request</button><a class="button secondary" href="#how">See how Sun works</a></div>
+        <div class="trust"><span>Clear fees</span><span>Visible payment status</span><span>Local withdrawal options</span></div>
+      </div>
+      <div class="phone" aria-label="Sun mobile app preview">
+        <div class="phone-top"><span>9:41</span><span>● ● ●</span></div>
+        <div class="screen">
+          <div class="screen-brand"><span class="sunmark"></span> sun</div>
+          <div class="welcome">Good morning, Sam</div>
+          <div class="balance">$1,248.50</div><div class="sub">Available to withdraw</div>
+          <div class="payment-card"><header><span>Invoice #SUN-2048</span><span class="pill">PAID</span></header><div class="amount">$500.00 USD</div><div class="sub">From Alex Morgan · Product design</div></div>
+          <div class="status"><b>Everything is clear.</b>Your payment is available. View the exact exchange rate before withdrawing to your local account.</div>
+        </div>
+      </div>
+    </div>
+
+    <section id="why"><div class="wrap"><div class="section-head"><div class="eyebrow">Built around dignity</div><h2>Global work should not mean uncertain pay.</h2><p>Sun is designed for the moments that derail projects: unclear fees, inaccessible payout methods, silent reviews, and support that never answers.</p></div><div class="grid3"><article class="card"><div class="icon">◎</div><h3>Get paid simply</h3><p>Create an invoice or payment link. Share it with a client using their email, phone number, or a direct link.</p></article><article class="card"><div class="icon">☀</div><h3>See every step</h3><p>Track a payment from paid to reviewing to available to withdrawn—without being left in the dark.</p></article><article class="card"><div class="icon">↗</div><h3>Withdraw locally</h3><p>See exchange rates, fees, and expected delivery before choosing a supported local payout method.</p></article></div></div></section>
+
+    <section class="flow" id="how"><div class="wrap"><div class="section-head"><div class="eyebrow" style="color:#ffc550">A clear payment journey</div><h2>Every payment should have a visible next step.</h2><p>Illustrative product flow for freelancers and small businesses receiving international client payments.</p></div><div class="steps"><article class="step"><div class="stepno">01</div><h3>Sign up</h3><p>Use your email and phone number to begin.</p></article><article class="step"><div class="stepno">02</div><h3>Verify</h3><p>Complete required identity checks for your location and payment limits.</p></article><article class="step"><div class="stepno">03</div><h3>Request</h3><p>Create an invoice or share a payment link with a client.</p></article><article class="step"><div class="stepno">04</div><h3>Track</h3><p>Follow the payment status in plain language.</p></article><article class="step"><div class="stepno">05</div><h3>Review clearly</h3><p>If review is needed, see the requested action and next update.</p></article><article class="step"><div class="stepno">06</div><h3>Withdraw</h3><p>Choose an available local payout route and confirm the full cost.</p></article></div></div></section>
+
+    <section id="demo"><div class="wrap">
+      <div class="section-head"><div class="eyebrow">Live prototype</div><h2>Try Sun with your own account.</h2><p>Sign up, create a real payment request, and walk it through review to withdrawal — stored in Supabase, not just in this page.</p></div>
+
+      <div id="authGate" class="card auth-card">
+        <h3 style="margin:0 0 4px;">Sign in to Sun</h3>
+        <p class="sub" style="margin:0 0 14px;">This connects to your own Supabase project.</p>
+        <form id="authForm" data-mode="signin">
+          <label for="authEmail">Email</label>
+          <input id="authEmail" type="email" required />
+          <label for="authPassword">Password</label>
+          <input id="authPassword" type="password" minlength="6" required />
+          <div class="field-error" id="authError"></div>
+          <div style="margin-top:16px;"><button class="button" id="authSubmit" type="submit">Sign in</button></div>
+        </form>
+        <button class="linklike" id="authToggle">Need an account? Sign up</button>
+      </div>
+
+      <div id="appShell" class="hidden">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+          <button class="linklike" id="signOut">Sign out</button>
+        </div>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+          <button class="tab-btn" data-tab="request">New request</button>
+          <button class="tab-btn" data-tab="status">Status</button>
+        </div>
+
+        <div id="tab-dashboard" class="tab-panel active">
+          <div class="form-row">
+            <div class="card"><div class="sub">Available</div><div class="invoice-value" id="bal-available">$0.00</div></div>
+            <div class="card"><div class="sub">Pending review</div><div class="invoice-value" id="bal-pending">$0.00</div></div>
+          </div>
+          <button class="button" style="margin-top:16px;" onclick="switchTab('request')">Create a payment request</button>
+        </div>
+
+        <div id="tab-request" class="tab-panel">
+          <form id="requestForm" class="dashboard">
+            <label for="client-email">Client email</label>
+            <input id="client-email" type="email" placeholder="client@example.com" required />
+            <label for="amount">Amount (USD)</label>
+            <input id="amount" type="number" min="1" step="0.01" placeholder="500" required />
+            <div class="field-error" id="form-error">Enter a client email and an amount above $0.</div>
+            <div style="margin-top:16px;"><button class="button" type="submit">Send payment link</button></div>
+          </form>
+        </div>
+
+        <div id="tab-status" class="tab-panel">
+          <div id="status-list"></div>
+        </div>
+      </div>
+    </div></section>
+
+    <section><div class="wrap"><div class="manifesto"><div class="eyebrow" style="color:#5a3700">The Sun promise</div><blockquote>"Talent should not be geographically discounted. A payment delay should never arrive as silence."</blockquote><p>Clear fees. Clear status. Clear path home.</p></div></div></section>
+  </main>
+  <footer><div class="wrap">Sun concept UI · Supabase-backed founder prototype for transparent global payments.</div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ---- fill these in with your Sun Supabase project's values ----
+    const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const STEPS = ['paid','reviewing','available','withdrawn'];
+    const STEP_LABELS = { paid:'Paid', reviewing:'Reviewing', available:'Available', withdrawn:'Withdrawn' };
+    const FX_RATE = 129.40, FEE_PCT = 0.02, FEE_FLAT = 0.30;
+
+    let currentUser = null;
+    let requests = [];
+
+    function fmt(n){ return '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+    function fmtKES(n){ return 'KSh ' + Number(n).toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+    function switchTab(name){
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id==='tab-'+name));
+    }
+    document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+
+    const authForm = document.getElementById('authForm');
+    const authToggle = document.getElementById('authToggle');
+    const authSubmit = document.getElementById('authSubmit');
+    const authError = document.getElementById('authError');
+
+    authToggle.addEventListener('click', () => {
+      const signup = authForm.dataset.mode === 'signup';
+      authForm.dataset.mode = signup ? 'signin' : 'signup';
+      authSubmit.textContent = signup ? 'Sign in' : 'Create account';
+      authToggle.textContent = signup ? 'Need an account? Sign up' : 'Have an account? Sign in';
+    });
+
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      authError.style.display = 'none';
+      try {
+        const mode = authForm.dataset.mode;
+        const { data, error } = mode === 'signup'
+          ? await supabase.auth.signUp({ email, password })
+          : await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        if (mode === 'signup' && !data.session) {
+          authError.textContent = 'Check your email to confirm your account, then sign in.';
+          authError.style.display = 'block';
+          return;
+        }
+        await onAuthed(data.session.user);
+      } catch (err) {
+        authError.textContent = err.message;
+        authError.style.display = 'block';
+      }
+    });
+
+    document.getElementById('signOut').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      currentUser = null;
+      requests = [];
+      document.getElementById('authGate').classList.remove('hidden');
+      document.getElementById('appShell').classList.add('hidden');
+    });
+
+    async function onAuthed(user){
+      currentUser = user;
+      document.getElementById('authGate').classList.add('hidden');
+      document.getElementById('appShell').classList.remove('hidden');
+      await loadRequests();
+      switchTab('dashboard');
+    }
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) onAuthed(data.session.user);
+    });
+
+    async function loadRequests(){
+      const { data, error } = await supabase
+        .from('payment_requests')
+        .select('*')
+        .order('created_at', { ascending:false });
+      if (!error) requests = data;
+      renderDashboard();
+      renderStatusList();
+    }
+
+    function renderDashboard(){
+      const available = requests.filter(r=>r.status==='available').reduce((s,r)=>s+Number(r.amount),0);
+      const pending = requests.filter(r=>['paid','reviewing'].includes(r.status)).reduce((s,r)=>s+Number(r.amount),0);
+      document.getElementById('bal-available').textContent = fmt(available);
+      document.getElementById('bal-pending').textContent = fmt(pending);
+    }
+
+    document.getElementById('requestForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const client_email = document.getElementById('client-email').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const errEl = document.getElementById('form-error');
+      if(!client_email || !amount || amount<=0){ errEl.style.display='block'; return; }
+      errEl.style.display = 'none';
+      const { error } = await supabase.from('payment_requests').insert({
+        user_id: currentUser.id, client_email, amount, currency:'USD', status:'awaiting_payment'
+      });
+      if(error){ errEl.textContent = error.message; errEl.style.display='block'; return; }
+      document.getElementById('requestForm').reset();
+      await loadRequests();
+      switchTab('status');
+    });
+
+    function renderStepper(status){
+      const idx = STEPS.indexOf(status);
+      return STEPS.map((s,i)=>{
+        let cls = 'step2';
+        if(idx>i) cls+=' done'; else if(idx===i) cls+=' current';
+        return '<div class="'+cls+'"><div class="dot">'+(idx>i?'✓':(i+1))+'</div><div class="step2-label">'+STEP_LABELS[s]+'</div></div>';
+      }).join('');
+    }
+
+    function badgeClass(status){
+      return { awaiting_payment:'awaiting', paid:'', reviewing:'reviewing', available:'', withdrawn:'withdrawn' }[status] || '';
+    }
+    function badgeLabel(status){
+      return { awaiting_payment:'Awaiting payment', paid:'Paid', reviewing:'Reviewing', available:'Available', withdrawn:'Withdrawn' }[status];
+    }
+
+    function renderRequestCard(r){
+      let body = '';
+      if(r.status === 'awaiting_payment'){
+        body = '<p class="sub">Waiting for '+r.client_email+' to pay this link.</p>'+
+          '<button class="button secondary" onclick="advance(\''+r.id+'\',\'paid\')">Simulate: client pays</button>';
+      } else if(r.status === 'paid'){
+        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
+          '<p class="sub">Payment received — starting review.</p>'+
+          '<button class="button secondary" onclick="advance(\''+r.id+'\',\'reviewing\')">Simulate: start review</button>';
+      } else if(r.status === 'reviewing'){
+        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
+          '<ul class="info-list">'+
+            '<li><span class="k">What\'s happening</span><span>Verifying recipient identity</span></li>'+
+            '<li><span class="k">Expected by</span><span>Tomorrow, 5:00 PM EAT</span></li>'+
+            '<li><span class="k">Pending</span><span>'+fmt(r.amount)+'</span></li>'+
+          '</ul>'+
+          '<button class="button secondary" onclick="advance(\''+r.id+'\',\'available\')">Simulate: review cleared</button>';
+      } else if(r.status === 'available'){
+        const fee = r.amount*FEE_PCT + FEE_FLAT, kes = (r.amount-fee)*FX_RATE;
+        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
+          '<ul class="info-list">'+
+            '<li><span class="k">Exchange rate</span><span>1 USD = '+FX_RATE.toFixed(2)+' KES</span></li>'+
+            '<li><span class="k">Sun fee</span><span>'+fmt(fee)+'</span></li>'+
+            '<li><span class="k">You\'ll receive</span><span>'+fmtKES(kes)+'</span></li>'+
+          '</ul>'+
+          '<button class="button" onclick="advance(\''+r.id+'\',\'withdrawn\')">Confirm withdrawal</button>';
+      } else {
+        const fee = r.amount*FEE_PCT + FEE_FLAT, kes = (r.amount-fee)*FX_RATE;
+        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
+          '<p class="sub">'+fmtKES(kes)+' sent to the linked payout account.</p>';
+      }
+      return '<div class="card request-card">'+
+        '<header style="display:flex;justify-content:space-between;align-items:center;">'+
+          '<strong>'+fmt(r.amount)+' · '+r.client_email+'</strong>'+
+          '<span class="pill '+badgeClass(r.status)+'">'+badgeLabel(r.status)+'</span>'+
+        '</header>'+
+        '<div style="margin-top:12px;">'+body+'</div>'+
+      '</div>';
+    }
+
+    function renderStatusList(){
+      const el = document.getElementById('status-list');
+      if(!requests.length){
+        el.innerHTML = '<div class="empty"><p>No payment requests yet.</p><button class="button" onclick="switchTab(\'request\')">Create one</button></div>';
+        return;
+      }
+      el.innerHTML = requests.map(renderRequestCard).join('');
+    }
+
+    async function advance(id, newStatus){
+      const { error } = await supabase.from('payment_requests').update({ status:newStatus }).eq('id', id);
+      if(!error) await loadRequests();
+    }
+  </script>
+</body>
+</html>
