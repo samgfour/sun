@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sun — get paid in the light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --paper:#FBF8F2; --ink:#1A1F2B; --ink-soft:#5B6472; --card:#FFFFFF; --border:#E7E1D3;
+    --gold:#C97A1A; --gold-bg:#FBEBD6; --teal:#1F7A5C; --teal-bg:#E3F3EC; --danger:#B3261E;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14171F; --ink:#EDEAE2; --ink-soft:#9AA2AF; --card:#1C202B; --border:#2A2F3B;
+      --gold:#E8A33D; --gold-bg:#3A2C14; --teal:#3FBE8F; --teal-bg:#123027;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#14171F; --ink:#EDEAE2; --ink-soft:#9AA2AF; --card:#1C202B; --border:#2A2F3B;
+    --gold:#E8A33D; --gold-bg:#3A2C14; --teal:#3FBE8F; --teal-bg:#123027;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;line-height:1.5;}
+  .wrap{max-width:460px;margin:0 auto;padding:28px 20px 60px;}
+  .brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;letter-spacing:-0.02em;}
+  .brand span{border-bottom:3px solid var(--gold);}
+  .tagline{color:var(--ink-soft);font-size:14px;margin-top:4px;}
+  .demo-note{color:var(--ink-soft);font-size:12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+  nav{display:flex;gap:6px;margin:24px 0 20px;border-bottom:1px solid var(--border);}
+  nav button{flex:1;background:none;border:none;padding:10px 4px;font-family:inherit;font-size:14px;color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;}
+  nav button.active{color:var(--ink);border-color:var(--gold);font-weight:600;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
+  .stat-label{font-size:13px;color:var(--ink-soft);}
+  .stat-value{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;margin-top:2px;}
+  .row{display:flex;gap:12px;}
+  .row .card{flex:1;padding:16px;}
+  .btn{display:inline-block;width:100%;background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:13px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;}
+  .btn.secondary{background:none;border:1px solid var(--border);color:var(--ink);}
+  label{display:block;font-size:13px;color:var(--ink-soft);margin:14px 0 6px;}
+  input{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:15px;}
+  .hint{font-size:12px;color:var(--ink-soft);margin-top:8px;}
+  .error{font-size:13px;color:var(--danger);margin-top:6px;display:none;}
+  .stepper{display:flex;align-items:flex-start;margin:8px 0 22px;}
+  .step{flex:1;text-align:center;position:relative;}
+  .dot{width:26px;height:26px;border-radius:50%;background:var(--card);border:2px solid var(--border);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-soft);position:relative;z-index:1;}
+  .step.done .dot{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .step.current .dot{background:var(--gold);border-color:var(--gold);color:#fff;}
+  .step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;width:100%;height:2px;background:var(--border);}
+  .step.done:not(:last-child)::after{background:var(--teal);}
+  .step-label{font-size:12px;color:var(--ink-soft);}
+  .step.done .step-label,.step.current .step-label{color:var(--ink);font-weight:600;}
+  .info-list{margin:0;padding:0;list-style:none;}
+  .info-list li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px;}
+  .info-list li:last-child{border-bottom:none;}
+  .info-list .k{color:var(--ink-soft);}
+  .badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+  .badge.reviewing{background:var(--gold-bg);color:var(--gold);}
+  .badge.available{background:var(--teal-bg);color:var(--teal);}
+  .radio-row{display:flex;gap:10px;margin-top:6px;}
+  .radio-opt{flex:1;border:1px solid var(--border);border-radius:8px;padding:10px;font-size:14px;cursor:pointer;text-align:center;}
+  .radio-opt.selected{border-color:var(--gold);background:var(--gold-bg);color:var(--gold);font-weight:600;}
+  .empty{text-align:center;padding:30px 10px;color:var(--ink-soft);}
+  h2{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;margin:0 0 4px;}
+  p.sub{color:var(--ink-soft);font-size:13px;margin:0 0 16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><span>Sun</span></div>
+  <div class="tagline">Fast when safe. Clear when delayed. Fair at every step.</div>
+  <div class="demo-note">Interactive concept prototype for Sam, a graphic designer in Nairobi — no real payments are processed.</div>
+
+  <nav>
+    <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+    <button class="tab-btn" data-tab="request">New request</button>
+    <button class="tab-btn" data-tab="status">Status</button>
+  </nav>
+
+  <div id="dashboard" class="panel active">
+    <div class="row">
+      <div class="card">
+        <div class="stat-label">Available</div>
+        <div class="stat-value" id="bal-available">$125.50</div>
+      </div>
+      <div class="card">
+        <div class="stat-label">Pending review</div>
+        <div class="stat-value" id="bal-pending">$0.00</div>
+      </div>
+    </div>
+    <div class="card" id="active-summary" style="display:none;">
+      <div class="stat-label">Latest request</div>
+      <p style="margin:6px 0 14px;font-size:14px;" id="active-summary-text"></p>
+      <button class="btn secondary" onclick="switchTab('status')">View status</button>
+    </div>
+    <button class="btn" onclick="switchTab('request')">Create a payment request</button>
+  </div>
+
+  <div id="request" class="panel">
+    <h2>New payment request</h2>
+    <p class="sub">You'll be paid in USD and receive Kenyan shillings to your M-Pesa wallet.</p>
+    <div id="request-blocked" class="card" style="display:none;">
+      <p style="margin:0;font-size:14px;">You have a request in progress. Finish or withdraw it before starting another.</p>
+      <button class="btn secondary" style="margin-top:12px;" onclick="switchTab('status')">Go to status</button>
+    </div>
+    <form id="request-form">
+      <label for="client-email">Client email</label>
+      <input type="email" id="client-email" placeholder="client@example.com" required />
+      <label for="amount">Amount (USD)</label>
+      <input type="number" id="amount" placeholder="500" min="1" step="0.01" required />
+      <div class="error" id="form-error">Enter a client email and an amount above $0.</div>
+      <button class="btn" style="margin-top:18px;" type="submit">Send payment link</button>
+    </form>
+  </div>
+
+  <div id="status" class="panel">
+    <div id="status-empty" class="empty">
+      <p>No active payment requests yet.</p>
+      <button class="btn" style="width:auto;padding:10px 20px;" onclick="switchTab('request')">Create one</button>
+    </div>
+    <div id="status-active" style="display:none;">
+      <h2 id="status-title"></h2>
+      <p class="sub" id="status-sub"></p>
+      <div class="stepper" id="stepper"></div>
+      <div class="card" id="status-panel"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let state = { balanceAvailable: 125.50, balancePending: 0, request: null };
+const FX_RATE = 129.40;
+const FEE_PCT = 0.02;
+const FEE_FLAT = 0.30;
+
+function fmt(n){ return '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtKES(n){ return 'KSh ' + Number(n).toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id===name));
+  if(name==='status') renderStatus();
+  if(name==='request') renderRequestTab();
+}
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+
+function labelFor(status){
+  return {awaiting_payment:'Awaiting payment', paid:'Paid', reviewing:'Reviewing', available:'Available to withdraw', withdrawn:'Withdrawn'}[status];
+}
+
+function renderDashboard(){
+  document.getElementById('bal-available').textContent = fmt(state.balanceAvailable);
+  document.getElementById('bal-pending').textContent = fmt(state.balancePending);
+  const summary = document.getElementById('active-summary');
+  if(state.request && state.request.status!=='withdrawn'){
+    summary.style.display='block';
+    document.getElementById('active-summary-text').textContent =
+      fmt(state.request.amount)+' from '+state.request.clientEmail+' — '+labelFor(state.request.status);
+  } else {
+    summary.style.display='none';
+  }
+}
+
+function renderRequestTab(){
+  const blocked = !!(state.request && state.request.status!=='withdrawn');
+  document.getElementById('request-blocked').style.display = blocked?'block':'none';
+  document.getElementById('request-form').style.display = blocked?'none':'block';
+}
+
+document.getElementById('request-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const email = document.getElementById('client-email').value.trim();
+  const amount = parseFloat(document.getElementById('amount').value);
+  const err = document.getElementById('form-error');
+  if(!email || !amount || amount<=0){ err.style.display='block'; return; }
+  err.style.display='none';
+  state.request = { clientEmail: email, amount: amount, status:'awaiting_payment', createdAt: new Date() };
+  document.getElementById('client-email').value='';
+  document.getElementById('amount').value='';
+  switchTab('status');
+});
+
+const STEPS = ['paid','reviewing','available','withdrawn'];
+const STEP_LABELS = {paid:'Paid', reviewing:'Reviewing', available:'Available', withdrawn:'Withdrawn'};
+
+function renderStepper(currentStatus){
+  const idx = STEPS.indexOf(currentStatus);
+  return STEPS.map((s,i)=>{
+    let cls = 'step';
+    if(idx>i) cls+=' done'; else if(idx===i) cls+=' current';
+    return '<div class="'+cls+'"><div class="dot">'+(idx>i?'✓':(i+1))+'</div><div class="step-label">'+STEP_LABELS[s]+'</div></div>';
+  }).join('');
+}
+
+function renderStatus(){
+  const req = state.request;
+  document.getElementById('status-empty').style.display = req? 'none':'block';
+  document.getElementById('status-active').style.display = req? 'block':'none';
+  if(!req) return;
+
+  document.getElementById('status-title').textContent = fmt(req.amount)+' from '+req.clientEmail;
+
+  if(req.status==='awaiting_payment'){
+    document.getElementById('status-sub').textContent = 'Waiting for your client to pay the link.';
+    document.getElementById('stepper').innerHTML = '';
+    document.getElementById('status-panel').innerHTML =
+      '<p style="margin:0 0 14px;font-size:14px;">A payment link for '+fmt(req.amount)+' has been sent to '+req.clientEmail+'. Nothing to do until they pay.</p>'+
+      '<button class="btn" onclick="advance(\'paid\')">Simulate: client pays</button>';
+    return;
+  }
+
+  document.getElementById('status-sub').textContent = 'Here is exactly where your money is right now.';
+  document.getElementById('stepper').innerHTML = renderStepper(req.status);
+
+  if(req.status==='paid'){
+    document.getElementById('status-panel').innerHTML =
+      '<p style="margin:0 0 14px;font-size:14px;">Payment received. We\'re starting the standard review before releasing funds.</p>'+
+      '<button class="btn" onclick="advance(\'reviewing\')">Simulate: start review</button>';
+  } else if(req.status==='reviewing'){
+    document.getElementById('status-panel').innerHTML =
+      '<span class="badge reviewing">Reviewing</span>'+
+      '<ul class="info-list" style="margin-top:14px;">'+
+        '<li><span class="k">What\'s happening</span><span>Verifying recipient identity for this amount</span></li>'+
+        '<li><span class="k">Action needed</span><span>None — documents on file are sufficient</span></li>'+
+        '<li><span class="k">Expected by</span><span>Tomorrow, 5:00 PM EAT</span></li>'+
+        '<li><span class="k">Available now</span><span>'+fmt(0)+'</span></li>'+
+        '<li><span class="k">Pending</span><span>'+fmt(req.amount)+'</span></li>'+
+      '</ul>'+
+      '<button class="btn" style="margin-top:16px;" onclick="advance(\'available\')">Simulate: review cleared</button>'+
+      '<button class="btn secondary" style="margin-top:10px;" onclick="this.nextElementSibling.style.display=\'block\';this.style.display=\'none\';">Appeal or ask a question</button>'+
+      '<p class="hint" style="display:none;">Support ticket opened — expect a first response within 2 hours.</p>';
+  } else if(req.status==='available'){
+    const fee = req.amount*FEE_PCT + FEE_FLAT;
+    const net = req.amount - fee;
+    const kes = net*FX_RATE;
+    document.getElementById('status-panel').innerHTML =
+      '<span class="badge available">Available to withdraw</span>'+
+      '<ul class="info-list" style="margin-top:14px;">'+
+        '<li><span class="k">Exchange rate</span><span>1 USD = '+FX_RATE.toFixed(2)+' KES</span></li>'+
+        '<li><span class="k">Sun fee</span><span>'+fmt(fee)+'</span></li>'+
+        '<li><span class="k">You\'ll receive</span><span>'+fmtKES(kes)+'</span></li>'+
+        '<li><span class="k">Delivery time</span><span>Minutes, once confirmed</span></li>'+
+      '</ul>'+
+      '<label>Payout method</label>'+
+      '<div class="radio-row">'+
+        '<div class="radio-opt selected" onclick="selectMethod(this)">M-Pesa</div>'+
+        '<div class="radio-opt" onclick="selectMethod(this)">Bank transfer</div>'+
+      '</div>'+
+      '<button class="btn" style="margin-top:18px;" onclick="advance(\'withdrawn\')">Confirm withdrawal</button>';
+  } else if(req.status==='withdrawn'){
+    const fee = req.amount*FEE_PCT + FEE_FLAT;
+    const kes = (req.amount-fee)*FX_RATE;
+    document.getElementById('status-panel').innerHTML =
+      '<p style="margin:0 0 14px;font-size:14px;">'+fmtKES(kes)+' was sent to your M-Pesa wallet.</p>'+
+      '<button class="btn secondary" onclick="resetRequest()">Create another request</button>';
+  }
+}
+
+function selectMethod(el){
+  el.parentElement.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function advance(newStatus){
+  const req = state.request;
+  if(newStatus==='paid'){ state.balancePending += req.amount; }
+  if(newStatus==='available'){ state.balancePending -= req.amount; state.balanceAvailable += req.amount; }
+  if(newStatus==='withdrawn'){ state.balanceAvailable -= req.amount; }
+  req.status = newStatus;
+  renderStatus();
+  renderDashboard();
+}
+
+function resetRequest(){
+  state.request = null;
+  switchTab('dashboard');
+  renderDashboard();
+}
+
+renderDashboard();
+</script>
+</body>
+</html>
