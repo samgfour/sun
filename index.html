@@ -16,6 +16,7 @@
     .navlinks { display:flex; gap:24px; font-size:14px; color:#385248; }
     .button { border:0; border-radius:999px; padding:12px 18px; font:inherit; font-weight:700; cursor:pointer; background:var(--ink); color:#fff; transition:.2s transform,.2s opacity; }
     .button:hover { transform:translateY(-1px); opacity:.93; }
+    .button:disabled { cursor:not-allowed; opacity:.65; transform:none; }
     .button.secondary { background:#fff; color:var(--ink); border:1px solid var(--line); }
     .hero { display:grid; grid-template-columns:1.05fr .95fr; gap:48px; padding:62px 0 74px; align-items:center; }
     .eyebrow { color:var(--green); text-transform:uppercase; letter-spacing:.12em; font-size:12px; font-weight:800; }
@@ -68,7 +69,6 @@
     .manifesto blockquote { font-size:clamp(23px,3.2vw,38px); line-height:1.15; letter-spacing:-.04em; font-weight:750; max-width:850px; margin:0; }
     .manifesto p { margin:20px 0 0; font-weight:700; }
     footer { padding:38px 0; color:#61736b; font-size:14px; }
-    /* app + auth additions */
     .tabs { display:flex; gap:6px; border-bottom:1px solid var(--line); margin:6px 0 22px; }
     .tab-btn { flex:1; background:none; border:none; padding:10px 4px; font:inherit; font-size:14px; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; }
     .tab-btn.active { color:var(--ink); border-color:var(--sun2); font-weight:700; }
@@ -112,260 +112,569 @@
         <div class="eyebrow">Payments without the darkness</div>
         <h1>Your work deserves a <span class="accent">clear path</span> home.</h1>
         <p class="lead">Sun helps African freelancers and small businesses receive global payments, understand every fee, and cash out locally—with clarity when money needs review.</p>
-        <div class="actions"><button class="button" onclick="document.querySelector('#demo').scrollIntoView({behavior:'smooth'})">Create a payment request</button><a class="button secondary" href="#how">See how Sun works</a></div>
+        <div class="actions">
+          <button class="button" onclick="document.querySelector('#demo').scrollIntoView({behavior:'smooth'})">Create a payment request</button>
+          <a class="button secondary" href="#how">See how Sun works</a>
+        </div>
         <div class="trust"><span>Clear fees</span><span>Visible payment status</span><span>Local withdrawal options</span></div>
       </div>
+
       <div class="phone" aria-label="Sun mobile app preview">
         <div class="phone-top"><span>9:41</span><span>● ● ●</span></div>
         <div class="screen">
           <div class="screen-brand"><span class="sunmark"></span> sun</div>
           <div class="welcome">Good morning, Sam</div>
-          <div class="balance">$1,248.50</div><div class="sub">Available to withdraw</div>
-          <div class="payment-card"><header><span>Invoice #SUN-2048</span><span class="pill">PAID</span></header><div class="amount">$500.00 USD</div><div class="sub">From Alex Morgan · Product design</div></div>
+          <div class="balance">$1,248.50</div>
+          <div class="sub">Available to withdraw</div>
+          <div class="payment-card">
+            <header><span>Invoice #SUN-2048</span><span class="pill">PAID</span></header>
+            <div class="amount">$500.00 USD</div>
+            <div class="sub">From Alex Morgan · Product design</div>
+          </div>
           <div class="status"><b>Everything is clear.</b>Your payment is available. View the exact exchange rate before withdrawing to your local account.</div>
         </div>
       </div>
     </div>
 
-    <section id="why"><div class="wrap"><div class="section-head"><div class="eyebrow">Built around dignity</div><h2>Global work should not mean uncertain pay.</h2><p>Sun is designed for the moments that derail projects: unclear fees, inaccessible payout methods, silent reviews, and support that never answers.</p></div><div class="grid3"><article class="card"><div class="icon">◎</div><h3>Get paid simply</h3><p>Create an invoice or payment link. Share it with a client using their email, phone number, or a direct link.</p></article><article class="card"><div class="icon">☀</div><h3>See every step</h3><p>Track a payment from paid to reviewing to available to withdrawn—without being left in the dark.</p></article><article class="card"><div class="icon">↗</div><h3>Withdraw locally</h3><p>See exchange rates, fees, and expected delivery before choosing a supported local payout method.</p></article></div></div></section>
-
-    <section class="flow" id="how"><div class="wrap"><div class="section-head"><div class="eyebrow" style="color:#ffc550">A clear payment journey</div><h2>Every payment should have a visible next step.</h2><p>Illustrative product flow for freelancers and small businesses receiving international client payments.</p></div><div class="steps"><article class="step"><div class="stepno">01</div><h3>Sign up</h3><p>Use your email and phone number to begin.</p></article><article class="step"><div class="stepno">02</div><h3>Verify</h3><p>Complete required identity checks for your location and payment limits.</p></article><article class="step"><div class="stepno">03</div><h3>Request</h3><p>Create an invoice or share a payment link with a client.</p></article><article class="step"><div class="stepno">04</div><h3>Track</h3><p>Follow the payment status in plain language.</p></article><article class="step"><div class="stepno">05</div><h3>Review clearly</h3><p>If review is needed, see the requested action and next update.</p></article><article class="step"><div class="stepno">06</div><h3>Withdraw</h3><p>Choose an available local payout route and confirm the full cost.</p></article></div></div></section>
-
-    <section id="demo"><div class="wrap">
-      <div class="section-head"><div class="eyebrow">Live prototype</div><h2>Try Sun with your own account.</h2><p>Sign up, create a real payment request, and walk it through review to withdrawal — stored in Supabase, not just in this page.</p></div>
-
-      <div id="authGate" class="card auth-card">
-        <h3 style="margin:0 0 4px;">Sign in to Sun</h3>
-        <p class="sub" style="margin:0 0 14px;">This connects to your own Supabase project.</p>
-        <form id="authForm" data-mode="signin">
-          <label for="authEmail">Email</label>
-          <input id="authEmail" type="email" required />
-          <label for="authPassword">Password</label>
-          <input id="authPassword" type="password" minlength="6" required />
-          <div class="field-error" id="authError"></div>
-          <div style="margin-top:16px;"><button class="button" id="authSubmit" type="submit">Sign in</button></div>
-        </form>
-        <button class="linklike" id="authToggle">Need an account? Sign up</button>
+    <section id="why">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Built around dignity</div>
+          <h2>Global work should not mean uncertain pay.</h2>
+          <p>Sun is designed for the moments that derail projects: unclear fees, inaccessible payout methods, silent reviews, and support that never answers.</p>
+        </div>
+        <div class="grid3">
+          <article class="card"><div class="icon">◎</div><h3>Get paid simply</h3><p>Create an invoice or payment link. Share it with a client using their email, phone number, or a direct link.</p></article>
+          <article class="card"><div class="icon">☀</div><h3>See every step</h3><p>Track a payment from paid to reviewing to available to withdrawn—without being left in the dark.</p></article>
+          <article class="card"><div class="icon">↗</div><h3>Withdraw locally</h3><p>See exchange rates, fees, and expected delivery before choosing a supported local payout method.</p></article>
+        </div>
       </div>
+    </section>
 
-      <div id="appShell" class="hidden">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
-          <button class="linklike" id="signOut">Sign out</button>
+    <section class="flow" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow" style="color:#ffc550">A clear payment journey</div>
+          <h2>Every payment should have a visible next step.</h2>
+          <p>Illustrative product flow for freelancers and small businesses receiving international client payments.</p>
         </div>
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-          <button class="tab-btn" data-tab="request">New request</button>
-          <button class="tab-btn" data-tab="status">Status</button>
+        <div class="steps">
+          <article class="step"><div class="stepno">01</div><h3>Sign up</h3><p>Use your email and phone number to begin.</p></article>
+          <article class="step"><div class="stepno">02</div><h3>Verify</h3><p>Complete required identity checks for your location and payment limits.</p></article>
+          <article class="step"><div class="stepno">03</div><h3>Request</h3><p>Create an invoice or share a payment link with a client.</p></article>
+          <article class="step"><div class="stepno">04</div><h3>Track</h3><p>Follow the payment status in plain language.</p></article>
+          <article class="step"><div class="stepno">05</div><h3>Review clearly</h3><p>If review is needed, see the requested action and next update.</p></article>
+          <article class="step"><div class="stepno">06</div><h3>Withdraw</h3><p>Choose an available local payout route and confirm the full cost.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Live prototype</div>
+          <h2>Try Sun with your own account.</h2>
+          <p>Sign up, create a real payment request, and walk it through review to withdrawal — stored in Supabase, not just in this page.</p>
         </div>
 
-        <div id="tab-dashboard" class="tab-panel active">
-          <div class="form-row">
-            <div class="card"><div class="sub">Available</div><div class="invoice-value" id="bal-available">$0.00</div></div>
-            <div class="card"><div class="sub">Pending review</div><div class="invoice-value" id="bal-pending">$0.00</div></div>
-          </div>
-          <button class="button" style="margin-top:16px;" onclick="switchTab('request')">Create a payment request</button>
-        </div>
+        <div id="authGate" class="card auth-card">
+          <h3 style="margin:0 0 4px;">Sign in to Sun</h3>
+          <p class="sub" style="margin:0 0 14px;">This connects to your own Supabase project.</p>
 
-        <div id="tab-request" class="tab-panel">
-          <form id="requestForm" class="dashboard">
-            <label for="client-email">Client email</label>
-            <input id="client-email" type="email" placeholder="client@example.com" required />
-            <label for="amount">Amount (USD)</label>
-            <input id="amount" type="number" min="1" step="0.01" placeholder="500" required />
-            <div class="field-error" id="form-error">Enter a client email and an amount above $0.</div>
-            <div style="margin-top:16px;"><button class="button" type="submit">Send payment link</button></div>
+          <form id="authForm" data-mode="signin">
+            <label for="authEmail">Email</label>
+            <input id="authEmail" type="email" autocomplete="email" required />
+
+            <label for="authPassword">Password</label>
+            <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required />
+
+            <div class="field-error" id="authError" role="alert"></div>
+
+            <div style="margin-top:16px;">
+              <button class="button" id="authSubmit" type="submit">Sign in</button>
+            </div>
           </form>
+
+          <button class="linklike" id="authToggle" type="button">Need an account? Sign up</button>
         </div>
 
-        <div id="tab-status" class="tab-panel">
-          <div id="status-list"></div>
+        <div id="appShell" class="hidden">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+            <button class="linklike" id="signOut" type="button">Sign out</button>
+          </div>
+
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="dashboard" type="button">Dashboard</button>
+            <button class="tab-btn" data-tab="request" type="button">New request</button>
+            <button class="tab-btn" data-tab="status" type="button">Status</button>
+          </div>
+
+          <div id="tab-dashboard" class="tab-panel active">
+            <div class="form-row">
+              <div class="card"><div class="sub">Available</div><div class="invoice-value" id="bal-available">$0.00</div></div>
+              <div class="card"><div class="sub">Pending review</div><div class="invoice-value" id="bal-pending">$0.00</div></div>
+            </div>
+            <button class="button" style="margin-top:16px;" type="button" onclick="switchTab('request')">Create a payment request</button>
+          </div>
+
+          <div id="tab-request" class="tab-panel">
+            <form id="requestForm" class="dashboard">
+              <label for="client-email">Client email</label>
+              <input id="client-email" type="email" placeholder="client@example.com" required />
+
+              <label for="amount">Amount (USD)</label>
+              <input id="amount" type="number" min="1" step="0.01" placeholder="500" required />
+
+              <div class="field-error" id="form-error">Enter a client email and an amount above $0.</div>
+
+              <div style="margin-top:16px;">
+                <button class="button" type="submit">Send payment link</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="tab-status" class="tab-panel">
+            <div id="status-list"></div>
+          </div>
         </div>
       </div>
-    </div></section>
+    </section>
 
-    <section><div class="wrap"><div class="manifesto"><div class="eyebrow" style="color:#5a3700">The Sun promise</div><blockquote>"Talent should not be geographically discounted. A payment delay should never arrive as silence."</blockquote><p>Clear fees. Clear status. Clear path home.</p></div></div></section>
+    <section>
+      <div class="wrap">
+        <div class="manifesto">
+          <div class="eyebrow" style="color:#5a3700">The Sun promise</div>
+          <blockquote>"Talent should not be geographically discounted. A payment delay should never arrive as silence."</blockquote>
+          <p>Clear fees. Clear status. Clear path home.</p>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer><div class="wrap">Sun concept UI · Supabase-backed founder prototype for transparent global payments.</div></footer>
+
+  <footer>
+    <div class="wrap">Sun concept UI · Supabase-backed founder prototype for transparent global payments.</div>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ---- fill these in with your Sun Supabase project's values ----
-    const SUPABASE_URL = 'https://skgojmzodtcmfbahoxse.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_k8i3wMvLW_0lffKo88ZJmA_PWGGZCMP';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = "https://skgojmzodtcmfbahoxse.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_k8i3wMvLW_0lffKo88ZJmA_PWGGZCMP";
 
-    const STEPS = ['paid','reviewing','available','withdrawn'];
-    const STEP_LABELS = { paid:'Paid', reviewing:'Reviewing', available:'Available', withdrawn:'Withdrawn' };
-    const FX_RATE = 129.40, FEE_PCT = 0.02, FEE_FLAT = 0.30;
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const STEPS = ["paid", "reviewing", "available", "withdrawn"];
+
+    const STEP_LABELS = {
+      paid: "Paid",
+      reviewing: "Reviewing",
+      available: "Available",
+      withdrawn: "Withdrawn"
+    };
+
+    const FX_RATE = 129.4;
+    const FEE_PCT = 0.02;
+    const FEE_FLAT = 0.3;
 
     let currentUser = null;
     let requests = [];
 
-    function fmt(n){ return '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-    function fmtKES(n){ return 'KSh ' + Number(n).toLocaleString('en-KE',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
-    function switchTab(name){
-      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
-      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id==='tab-'+name));
+    function fmt(n) {
+      return "$" + Number(n).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
     }
-    document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
 
-    const authForm = document.getElementById('authForm');
-    const authToggle = document.getElementById('authToggle');
-    const authSubmit = document.getElementById('authSubmit');
-    const authError = document.getElementById('authError');
+    function fmtKES(n) {
+      return "KSh " + Number(n).toLocaleString("en-KE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
 
-    authToggle.addEventListener('click', () => {
-      const signup = authForm.dataset.mode === 'signup';
-      authForm.dataset.mode = signup ? 'signin' : 'signup';
-      authSubmit.textContent = signup ? 'Sign in' : 'Create account';
-      authToggle.textContent = signup ? 'Need an account? Sign up' : 'Have an account? Sign in';
+    function switchTab(name) {
+      document.querySelectorAll(".tab-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.tab === name);
+      });
+
+      document.querySelectorAll(".tab-panel").forEach((panel) => {
+        panel.classList.toggle("active", panel.id === "tab-" + name);
+      });
+    }
+
+    document.querySelectorAll(".tab-btn").forEach((button) => {
+      button.addEventListener("click", () => switchTab(button.dataset.tab));
     });
 
-    authForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      authError.style.display = 'none';
+    const authForm = document.getElementById("authForm");
+    const authToggle = document.getElementById("authToggle");
+    const authSubmit = document.getElementById("authSubmit");
+    const authError = document.getElementById("authError");
+
+    function showAuthError(message) {
+      authError.textContent = message;
+      authError.style.display = "block";
+    }
+
+    function hideAuthError() {
+      authError.textContent = "";
+      authError.style.display = "none";
+    }
+
+    function setAuthLoading(isLoading) {
+      const signupMode = authForm.dataset.mode === "signup";
+
+      authSubmit.disabled = isLoading;
+
+      if (isLoading) {
+        authSubmit.textContent = signupMode
+          ? "Creating account…"
+          : "Signing in…";
+        return;
+      }
+
+      authSubmit.textContent = signupMode
+        ? "Create account"
+        : "Sign in";
+    }
+
+    authToggle.addEventListener("click", () => {
+      const isCurrentlySignup = authForm.dataset.mode === "signup";
+      const newMode = isCurrentlySignup ? "signin" : "signup";
+
+      authForm.dataset.mode = newMode;
+      authForm.reset();
+      hideAuthError();
+
+      const isSignup = newMode === "signup";
+
+      authSubmit.textContent = isSignup
+        ? "Create account"
+        : "Sign in";
+
+      authToggle.textContent = isSignup
+        ? "Have an account? Sign in"
+        : "Need an account? Sign up";
+
+      document.querySelector("#authGate h3").textContent = isSignup
+        ? "Create your Sun account"
+        : "Sign in to Sun";
+
+      document.getElementById("authPassword").autocomplete = isSignup
+        ? "new-password"
+        : "current-password";
+    });
+
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById("authEmail").value.trim();
+      const password = document.getElementById("authPassword").value;
+      const mode = authForm.dataset.mode;
+
+      hideAuthError();
+      setAuthLoading(true);
+
       try {
-        const mode = authForm.dataset.mode;
-        const { data, error } = mode === 'signup'
-          ? await supabase.auth.signUp({ email, password })
-          : await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        if (mode === 'signup' && !data.session) {
-          authError.textContent = 'Check your email to confirm your account, then sign in.';
-          authError.style.display = 'block';
+        const result = mode === "signup"
+          ? await supabase.auth.signUp({
+              email,
+              password
+            })
+          : await supabase.auth.signInWithPassword({
+              email,
+              password
+            });
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        /*
+          With Supabase email confirmation enabled, signUp returns a user but
+          deliberately does not create a logged-in session until confirmation.
+        */
+        if (mode === "signup" && !result.data.session) {
+          showAuthError(
+            "Account created. Check your email to confirm your account, then sign in."
+          );
+          setAuthLoading(false);
           return;
         }
-        await onAuthed(data.session.user);
-      } catch (err) {
-        authError.textContent = err.message;
-        authError.style.display = 'block';
+
+        const user = result.data.session?.user || result.data.user;
+
+        if (!user) {
+          throw new Error(
+            "No active session was returned. Please confirm your email, then sign in."
+          );
+        }
+
+        await onAuthed(user);
+      } catch (error) {
+        showAuthError(
+          error?.message || "Unable to continue. Please try again."
+        );
+        setAuthLoading(false);
       }
     });
 
-    document.getElementById('signOut').addEventListener('click', async () => {
-      await supabase.auth.signOut();
+    document.getElementById("signOut").addEventListener("click", async () => {
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        console.error("Sign-out error:", error);
+      }
+
       currentUser = null;
       requests = [];
-      document.getElementById('authGate').classList.remove('hidden');
-      document.getElementById('appShell').classList.add('hidden');
+
+      document.getElementById("authGate").classList.remove("hidden");
+      document.getElementById("appShell").classList.add("hidden");
+
+      authForm.dataset.mode = "signin";
+      authForm.reset();
+      hideAuthError();
+      setAuthLoading(false);
+
+      authToggle.textContent = "Need an account? Sign up";
+      document.querySelector("#authGate h3").textContent = "Sign in to Sun";
+      document.getElementById("authPassword").autocomplete = "current-password";
     });
 
-    async function onAuthed(user){
+    async function onAuthed(user) {
       currentUser = user;
-      document.getElementById('authGate').classList.add('hidden');
-      document.getElementById('appShell').classList.remove('hidden');
+
+      document.getElementById("authGate").classList.add("hidden");
+      document.getElementById("appShell").classList.remove("hidden");
+
       await loadRequests();
-      switchTab('dashboard');
+      switchTab("dashboard");
     }
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) onAuthed(data.session.user);
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        console.error("Session restoration error:", error);
+        return;
+      }
+
+      if (data.session?.user) {
+        onAuthed(data.session.user);
+      }
     });
 
-    async function loadRequests(){
+    async function loadRequests() {
       const { data, error } = await supabase
-        .from('payment_requests')
-        .select('*')
-        .order('created_at', { ascending:false });
-      if (!error) requests = data;
+        .from("payment_requests")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Could not load payment requests:", error);
+        requests = [];
+      } else {
+        requests = data || [];
+      }
+
       renderDashboard();
       renderStatusList();
     }
 
-    function renderDashboard(){
-      const available = requests.filter(r=>r.status==='available').reduce((s,r)=>s+Number(r.amount),0);
-      const pending = requests.filter(r=>['paid','reviewing'].includes(r.status)).reduce((s,r)=>s+Number(r.amount),0);
-      document.getElementById('bal-available').textContent = fmt(available);
-      document.getElementById('bal-pending').textContent = fmt(pending);
+    function renderDashboard() {
+      const available = requests
+        .filter((request) => request.status === "available")
+        .reduce((sum, request) => sum + Number(request.amount), 0);
+
+      const pending = requests
+        .filter((request) => ["paid", "reviewing"].includes(request.status))
+        .reduce((sum, request) => sum + Number(request.amount), 0);
+
+      document.getElementById("bal-available").textContent = fmt(available);
+      document.getElementById("bal-pending").textContent = fmt(pending);
     }
 
-    document.getElementById('requestForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const client_email = document.getElementById('client-email').value.trim();
-      const amount = parseFloat(document.getElementById('amount').value);
-      const errEl = document.getElementById('form-error');
-      if(!client_email || !amount || amount<=0){ errEl.style.display='block'; return; }
-      errEl.style.display = 'none';
-      const { error } = await supabase.from('payment_requests').insert({
-        user_id: currentUser.id, client_email, amount, currency:'USD', status:'awaiting_payment'
-      });
-      if(error){ errEl.textContent = error.message; errEl.style.display='block'; return; }
-      document.getElementById('requestForm').reset();
-      await loadRequests();
-      switchTab('status');
-    });
+    document.getElementById("requestForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    function renderStepper(status){
-      const idx = STEPS.indexOf(status);
-      return STEPS.map((s,i)=>{
-        let cls = 'step2';
-        if(idx>i) cls+=' done'; else if(idx===i) cls+=' current';
-        return '<div class="'+cls+'"><div class="dot">'+(idx>i?'✓':(i+1))+'</div><div class="step2-label">'+STEP_LABELS[s]+'</div></div>';
-      }).join('');
-    }
+      const client_email = document.getElementById("client-email").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+      const errEl = document.getElementById("form-error");
 
-    function badgeClass(status){
-      return { awaiting_payment:'awaiting', paid:'', reviewing:'reviewing', available:'', withdrawn:'withdrawn' }[status] || '';
-    }
-    function badgeLabel(status){
-      return { awaiting_payment:'Awaiting payment', paid:'Paid', reviewing:'Reviewing', available:'Available', withdrawn:'Withdrawn' }[status];
-    }
-
-    function renderRequestCard(r){
-      let body = '';
-      if(r.status === 'awaiting_payment'){
-        body = '<p class="sub">Waiting for '+r.client_email+' to pay this link.</p>'+
-          '<button class="button secondary" onclick="advance(\''+r.id+'\',\'paid\')">Simulate: client pays</button>';
-      } else if(r.status === 'paid'){
-        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
-          '<p class="sub">Payment received — starting review.</p>'+
-          '<button class="button secondary" onclick="advance(\''+r.id+'\',\'reviewing\')">Simulate: start review</button>';
-      } else if(r.status === 'reviewing'){
-        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
-          '<ul class="info-list">'+
-            '<li><span class="k">What\'s happening</span><span>Verifying recipient identity</span></li>'+
-            '<li><span class="k">Expected by</span><span>Tomorrow, 5:00 PM EAT</span></li>'+
-            '<li><span class="k">Pending</span><span>'+fmt(r.amount)+'</span></li>'+
-          '</ul>'+
-          '<button class="button secondary" onclick="advance(\''+r.id+'\',\'available\')">Simulate: review cleared</button>';
-      } else if(r.status === 'available'){
-        const fee = r.amount*FEE_PCT + FEE_FLAT, kes = (r.amount-fee)*FX_RATE;
-        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
-          '<ul class="info-list">'+
-            '<li><span class="k">Exchange rate</span><span>1 USD = '+FX_RATE.toFixed(2)+' KES</span></li>'+
-            '<li><span class="k">Sun fee</span><span>'+fmt(fee)+'</span></li>'+
-            '<li><span class="k">You\'ll receive</span><span>'+fmtKES(kes)+'</span></li>'+
-          '</ul>'+
-          '<button class="button" onclick="advance(\''+r.id+'\',\'withdrawn\')">Confirm withdrawal</button>';
-      } else {
-        const fee = r.amount*FEE_PCT + FEE_FLAT, kes = (r.amount-fee)*FX_RATE;
-        body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
-          '<p class="sub">'+fmtKES(kes)+' sent to the linked payout account.</p>';
-      }
-      return '<div class="card request-card">'+
-        '<header style="display:flex;justify-content:space-between;align-items:center;">'+
-          '<strong>'+fmt(r.amount)+' · '+r.client_email+'</strong>'+
-          '<span class="pill '+badgeClass(r.status)+'">'+badgeLabel(r.status)+'</span>'+
-        '</header>'+
-        '<div style="margin-top:12px;">'+body+'</div>'+
-      '</div>';
-    }
-
-    function renderStatusList(){
-      const el = document.getElementById('status-list');
-      if(!requests.length){
-        el.innerHTML = '<div class="empty"><p>No payment requests yet.</p><button class="button" onclick="switchTab(\'request\')">Create one</button></div>';
+      if (!currentUser) {
+        errEl.textContent = "Please sign in before creating a payment request.";
+        errEl.style.display = "block";
         return;
       }
-      el.innerHTML = requests.map(renderRequestCard).join('');
+
+      if (!client_email || !amount || amount <= 0) {
+        errEl.textContent = "Enter a client email and an amount above $0.";
+        errEl.style.display = "block";
+        return;
+      }
+
+      errEl.style.display = "none";
+
+      const { error } = await supabase
+        .from("payment_requests")
+        .insert({
+          user_id: currentUser.id,
+          client_email,
+          amount,
+          currency: "USD",
+          status: "awaiting_payment"
+        });
+
+      if (error) {
+        errEl.textContent = error.message;
+        errEl.style.display = "block";
+        return;
+      }
+
+      document.getElementById("requestForm").reset();
+      await loadRequests();
+      switchTab("status");
+    });
+
+    function renderStepper(status) {
+      const index = STEPS.indexOf(status);
+
+      return STEPS.map((step, position) => {
+        let className = "step2";
+
+        if (index > position) {
+          className += " done";
+        } else if (index === position) {
+          className += " current";
+        }
+
+        return `
+          <div class="${className}">
+            <div class="dot">${index > position ? "✓" : position + 1}</div>
+            <div class="step2-label">${STEP_LABELS[step]}</div>
+          </div>
+        `;
+      }).join("");
     }
 
-    async function advance(id, newStatus){
-      const { error } = await supabase.from('payment_requests').update({ status:newStatus }).eq('id', id);
-      if(!error) await loadRequests();
+    function badgeClass(status) {
+      return {
+        awaiting_payment: "awaiting",
+        paid: "",
+        reviewing: "reviewing",
+        available: "",
+        withdrawn: "withdrawn"
+      }[status] || "";
+    }
+
+    function badgeLabel(status) {
+      return {
+        awaiting_payment: "Awaiting payment",
+        paid: "Paid",
+        reviewing: "Reviewing",
+        available: "Available",
+        withdrawn: "Withdrawn"
+      }[status] || status;
+    }
+
+    function renderRequestCard(request) {
+      let body = "";
+
+      if (request.status === "awaiting_payment") {
+        body = `
+          <p class="sub">Waiting for ${request.client_email} to pay this link.</p>
+          <button class="button secondary" type="button" onclick="advance('${request.id}', 'paid')">
+            Simulate: client pays
+          </button>
+        `;
+      } else if (request.status === "paid") {
+        body = `
+          <div class="stepper">${renderStepper(request.status)}</div>
+          <p class="sub">Payment received — starting review.</p>
+          <button class="button secondary" type="button" onclick="advance('${request.id}', 'reviewing')">
+            Simulate: start review
+          </button>
+        `;
+      } else if (request.status === "reviewing") {
+        body = `
+          <div class="stepper">${renderStepper(request.status)}</div>
+          <ul class="info-list">
+            <li><span class="k">What's happening</span><span>Verifying recipient identity</span></li>
+            <li><span class="k">Expected by</span><span>Tomorrow, 5:00 PM EAT</span></li>
+            <li><span class="k">Pending</span><span>${fmt(request.amount)}</span></li>
+          </ul>
+          <button class="button secondary" type="button" onclick="advance('${request.id}', 'available')">
+            Simulate: review cleared
+          </button>
+        `;
+      } else if (request.status === "available") {
+        const fee = request.amount * FEE_PCT + FEE_FLAT;
+        const kes = (request.amount - fee) * FX_RATE;
+
+        body = `
+          <div class="stepper">${renderStepper(request.status)}</div>
+          <ul class="info-list">
+            <li><span class="k">Exchange rate</span><span>1 USD = ${FX_RATE.toFixed(2)} KES</span></li>
+            <li><span class="k">Sun fee</span><span>${fmt(fee)}</span></li>
+            <li><span class="k">You'll receive</span><span>${fmtKES(kes)}</span></li>
+          </ul>
+          <button class="button" type="button" onclick="advance('${request.id}', 'withdrawn')">
+            Confirm withdrawal
+          </button>
+        `;
+      } else {
+        const fee = request.amount * FEE_PCT + FEE_FLAT;
+        const kes = (request.amount - fee) * FX_RATE;
+
+        body = `
+          <div class="stepper">${renderStepper(request.status)}</div>
+          <p class="sub">${fmtKES(kes)} sent to the linked payout account.</p>
+        `;
+      }
+
+      return `
+        <div class="card request-card">
+          <header style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>${fmt(request.amount)} · ${request.client_email}</strong>
+            <span class="pill ${badgeClass(request.status)}">${badgeLabel(request.status)}</span>
+          </header>
+          <div style="margin-top:12px;">${body}</div>
+        </div>
+      `;
+    }
+
+    function renderStatusList() {
+      const statusList = document.getElementById("status-list");
+
+      if (!requests.length) {
+        statusList.innerHTML = `
+          <div class="empty">
+            <p>No payment requests yet.</p>
+            <button class="button" type="button" onclick="switchTab('request')">
+              Create one
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      statusList.innerHTML = requests.map(renderRequestCard).join("");
+    }
+
+    async function advance(id, newStatus) {
+      const { error } = await supabase
+        .from("payment_requests")
+        .update({ status: newStatus })
+        .eq("id", id);
+
+      if (error) {
+        console.error("Could not update payment status:", error);
+        return;
+      }
+
+      await loadRequests();
     }
   </script>
 </body>
