@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Buy Sun — Payments without the darkness</title>
+  <title>Sun — Payments without the darkness</title>
   <style>
     :root { --ink:#10251e; --muted:#5e716a; --sun:#ffb000; --sun2:#ff7a00; --cream:#fffaf0; --green:#0f6b51; --line:#e6e2d8; --card:#ffffff; --shadow:0 18px 50px rgba(21,46,38,.10); }
     * { box-sizing:border-box; }
@@ -87,9 +87,6 @@
     .info-list li { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px; }
     .info-list li:last-child { border-bottom:none; }
     .info-list .k { color:var(--muted); }
-    .radio-row { display:flex; gap:10px; margin-top:6px; }
-    .radio-opt { flex:1; border:1px solid var(--line); border-radius:10px; padding:10px; font-size:14px; cursor:pointer; text-align:center; }
-    .radio-opt.selected { border-color:var(--sun2); background:#fff1e0; color:#a34e00; font-weight:700; }
     .auth-card { max-width:380px; }
     .field-error { font-size:13px; color:#b3261e; margin-top:8px; display:none; }
     .linklike { background:none; border:none; color:var(--green); font-weight:700; font-size:13px; cursor:pointer; padding:0; margin-top:14px; }
@@ -112,7 +109,7 @@
   <main id="top">
     <div class="wrap hero">
       <div>
-	      <div class="eyebrow">Fast Payments without the darkness</div>
+        <div class="eyebrow">Payments without the darkness</div>
         <h1>Your work deserves a <span class="accent">clear path</span> home.</h1>
         <p class="lead">Sun helps African freelancers and small businesses receive global payments, understand every fee, and cash out locally—with clarity when money needs review.</p>
         <div class="actions"><button class="button" onclick="document.querySelector('#demo').scrollIntoView({behavior:'smooth'})">Create a payment request</button><a class="button secondary" href="#how">See how Sun works</a></div>
@@ -193,9 +190,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ---- fill these in with your Sun Supabase project's values ----
-    const SUPABASE_URL = 'https://uplgzkgsagplnqvxebhl.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_EQ6bNl-TlVqN6ywy5Afy4A_8qmm_h0a';
-  
+    const SUPABASE_URL = "https://uplgzkgsagplnqvxebhl.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_EQ6bNl-TlVqN6ywy5Afy4A_8qmm_h0a";
     let supabase = null;
     let configErrorMsg = null;
     try {
@@ -380,19 +376,13 @@
             '<li><span class="k">Sun fee</span><span>'+fmt(fee)+'</span></li>'+
             '<li><span class="k">You\'ll receive</span><span>'+fmtKES(kes)+'</span></li>'+
           '</ul>'+
-          '<label>Payout method</label>'+
-          '<div class="radio-row">'+
-            '<div class="radio-opt selected" data-method="mpesa" onclick="selectMethod(this)">M-Pesa</div>'+
-            '<div class="radio-opt" data-method="bank" onclick="selectMethod(this)">Bank transfer</div>'+
-          '</div>'+
-          '<button class="button" style="margin-top:14px;" onclick="confirmWithdrawal(\''+r.id+'\')">Confirm withdrawal</button>';
+          '<button class="button" onclick="advance(\''+r.id+'\',\'withdrawn\')">Confirm withdrawal</button>';
       } else {
         const fee = r.amount*FEE_PCT + FEE_FLAT, kes = (r.amount-fee)*FX_RATE;
-        const dest = r.payout_method === 'bank' ? 'bank account' : 'M-Pesa wallet';
         body = '<div class="stepper">'+renderStepper(r.status)+'</div>'+
-          '<p class="sub">'+fmtKES(kes)+' sent to your '+dest+'.</p>';
+          '<p class="sub">'+fmtKES(kes)+' sent to the linked payout account.</p>';
       }
-      return '<div class="card request-card" data-id="'+r.id+'">'+
+      return '<div class="card request-card">'+
         '<header style="display:flex;justify-content:space-between;align-items:center;">'+
           '<strong>'+fmt(r.amount)+' · '+r.client_email+'</strong>'+
           '<span class="pill '+badgeClass(r.status)+'">'+badgeLabel(r.status)+'</span>'+
@@ -410,25 +400,10 @@
       el.innerHTML = requests.map(renderRequestCard).join('');
     }
 
-    function selectMethod(el){
-      el.parentElement.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('selected'));
-      el.classList.add('selected');
-    }
-
-    function confirmWithdrawal(id){
-      const card = document.querySelector('.request-card[data-id="'+id+'"]');
-      const chosen = card ? card.querySelector('.radio-opt.selected') : null;
-      const method = chosen ? chosen.dataset.method : 'mpesa';
-      advance(id, 'withdrawn', method);
-    }
-
-    async function advance(id, newStatus, payoutMethod){
-      const updates = { status:newStatus };
-      if(payoutMethod) updates.payout_method = payoutMethod;
-      const { error } = await supabase.from('payment_requests').update(updates).eq('id', id);
+    async function advance(id, newStatus){
+      const { error } = await supabase.from('payment_requests').update({ status:newStatus }).eq('id', id);
       if(!error) await loadRequests();
     }
   </script>
 </body>
 </html>
-
